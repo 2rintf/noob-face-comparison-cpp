@@ -4,10 +4,15 @@ faceDemoGui::faceDemoGui(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+
+
+
 }
 
 void faceDemoGui::on_selectBtn_clicked()
 {
+	allClearOfInfoShow();
+
 	qDebug() << "select." << endl;
 	upload_img_path = QFileDialog::getOpenFileName(this,
 		"选取文件",
@@ -24,12 +29,19 @@ void faceDemoGui::on_selectBtn_clicked()
 	}
 	else
 	{
-
+		cv::Mat img_cv = cv::imread(upload_img_path.toStdString());
+		cv::cvtColor(img_cv, img_cv, cv::COLOR_BGR2RGB);
+		cv::resize(img_cv, img_cv, cv::Size(ui.selectedPic->width(), ui.selectedPic->height()));
+		QImage img_qt = QImage(img_cv.data, img_cv.cols, img_cv.rows, img_cv.depth(), QImage::Format_RGB888);
+		ui.selectedPic->setPixmap(QPixmap::fromImage(img_qt));
+		
 	}
 }
 
 void faceDemoGui::allClearOfInfoShow()
 {
+	//todo: 清除获得的5个匹配结果
+
 	ui.selectedPic->clear();
 	ui.nameShow->clear();
 	ui.sexShow->clear();
@@ -37,15 +49,12 @@ void faceDemoGui::allClearOfInfoShow()
 	ui.phoneShow->clear();
 	ui.emailShow->clear();
 	ui.matchedPicShow->clear();
-
-	//todo: 清除获得的5个匹配结果
-	//x dsdasdasd
-	//! 
 }
 
 void faceDemoGui::on_matchBtn_clicked()
 {
-	qDebug() << "match." << endl;
+	qDebug() << "match." ;
+
 }
 
 void faceDemoGui::on_firstBtn_clicked()

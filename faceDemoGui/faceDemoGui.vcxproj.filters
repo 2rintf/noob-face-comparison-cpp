@@ -34,6 +34,9 @@
     <ClCompile Include="DialogForAddNewFace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="faceCompareWrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="facedemogui.h">
@@ -58,5 +61,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="faceDemoGui.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="faceCompareWrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

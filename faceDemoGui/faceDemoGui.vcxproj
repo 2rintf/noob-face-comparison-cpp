@@ -34,10 +34,12 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="opencv343.props" />
+    <Import Project="dlib_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="opencv343_release.props" />
+    <Import Project="dlib_release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -82,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="faceCompareWrap.cpp" />
     <ClCompile Include="facedemogui.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DialogForAddNewFace.cpp" />
@@ -101,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DialogForAddNewFace.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="faceCompareWrap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

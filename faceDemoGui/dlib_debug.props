@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <IncludePath>C:\Users\2b\Desktop\dlib-master;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\2b\Desktop\dlib-master\build\dlib\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>dlib19.19.99_debug_64bit_msvc1916.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

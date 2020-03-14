@@ -20,6 +20,7 @@ public:
 private:
 	Ui::faceDemoGuiClass ui;
 	QString upload_img_path;
+	cv::Mat upload_img;
 
 	void allClearOfInfoShow();
 
