@@ -22,6 +22,10 @@ void faceDemoGui::on_selectBtn_clicked()
 		msg.setText("所选图片为空!请重新选择。");
 		msg.exec();
 	}
+	else
+	{
+
+	}
 }
 
 void faceDemoGui::allClearOfInfoShow()
@@ -34,7 +38,9 @@ void faceDemoGui::allClearOfInfoShow()
 	ui.emailShow->clear();
 	ui.matchedPicShow->clear();
 
-	//to-do: 清除获得的5个匹配结果
+	//todo: 清除获得的5个匹配结果
+	//x dsdasdasd
+	//! 
 }
 
 void faceDemoGui::on_matchBtn_clicked()
