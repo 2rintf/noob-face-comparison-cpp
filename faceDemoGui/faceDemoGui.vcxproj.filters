@@ -31,14 +31,23 @@
     <ClCompile Include="facedemogui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DialogForAddNewFace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="facedemogui.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="DialogForAddNewFace.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="facedemogui.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="dialogforaddnewface.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

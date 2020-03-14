@@ -33,9 +33,11 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="opencv343.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="opencv343_release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -82,11 +84,13 @@
   <ItemGroup>
     <ClCompile Include="facedemogui.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="DialogForAddNewFace.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="facedemogui.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="dialogforaddnewface.ui" />
     <QtUic Include="facedemogui.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="faceDemoGui.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="DialogForAddNewFace.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
