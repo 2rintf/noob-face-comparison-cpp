@@ -6,14 +6,17 @@
 #include <dlib/image_processing.h>
 #include <dlib/clustering.h>
 #include <dlib/dnn.h>
-//#include <dlib/image_io.h>
+#include <dlib/image_io.h>
 #include <dlib/matrix.h>
 #include <dlib/clustering.h>
 #include <dlib/dnn.h>
 #include <dlib/opencv.h>
 
+// For debug.
+#include <dlib/gui_widgets.h>
+
 using namespace std;
-using namespace cv;
+//using namespace cv;
 using namespace dlib;
 
 template <template <int, template<typename>class, int, typename> class block, int N, template<typename>class BN, typename SUBNET>
@@ -45,12 +48,9 @@ using anet_type = loss_metric<fc_no_bias<128, avg_pool_everything<
 	>>>>>>>>>>>>;
 // -------------------------------------------------------
 
-static frontal_face_detector detector = get_frontal_face_detector();
-static shape_predictor sp;
-//deserialize("shape_predictor_68_face_landmarks.dat") >> sp;
-
-static anet_type net;
-//deserialize("dlib_face_recognition_resnet_model_v1.dat") >> net;
+static frontal_face_detector face_detector = get_frontal_face_detector();
+static shape_predictor face_sp;
+static anet_type face_net;
 
 class face_info {
 
@@ -65,14 +65,12 @@ public:
 	std::vector<float> encoding_vector;
 	cv::Mat encoding;
 
-	int last_index;
 
-
-	void write(FileStorage& fs, int last_index) const //Write serialization for this class
+	void write(cv::FileStorage& fs) const //Write serialization for this class
 	{
 		//todo: 将人脸信息写入json.
 		//! 未测试
-		fs << to_string(last_index) << ":{"
+		fs << "{"
 			<< "name" << name
 			<< "sex" << sex
 			<< "index" << index
@@ -84,7 +82,7 @@ public:
 			<< "}";
 	}
 
-	void read(const FileNode& node)
+	void read(const cv::FileNode& node)
 	{
 		index = (int)node["index"];
 		name = (string)node["name"];
@@ -93,20 +91,19 @@ public:
 		path = (string)node["path"];
 		age = (int)node["age"];
 		phone = (int)node["phone"];
-		node["encoding"] >> encoding_vector;
 
-		Mat temp = Mat(128, 1, CV_32FC1, encoding_vector.data());
+		node["encoding"] >> encoding_vector;
+		cv::Mat temp = cv::Mat(128, 1, CV_32FC1, encoding_vector.data());
 		encoding = temp.clone();
 	}
 };
 
-static void write(FileStorage& fs, const string&, const face_info& x)
+static void write(cv::FileStorage& fs, const string&, const face_info& x)
 {
-	x.write(fs,x.last_index);
+	x.write(fs);
 }
 
-
-static void read(const FileNode& node, face_info& x, const face_info& default_value = face_info())
+static void read(const cv::FileNode& node, face_info& x, const face_info& default_value = face_info())
 {
 	if (node.empty())
 		x = default_value;
@@ -115,17 +112,29 @@ static void read(const FileNode& node, face_info& x, const face_info& default_va
 }
 
 
+
+
 class face_compare_alg
 {
 public:
 	face_compare_alg();
 	~face_compare_alg();
 
+	//todo: 再确认一下dlib初始化所需的内容!
 	static void initialize();
+	//static frontal_face_detector getFaceDetector() { return face_detector; }
+	//static shape_predictor getFaceSP() { return face_sp; }
+	//static anet_type getFaceNet() { return face_net; }
+	static void detectTestFunc(std::string img_path, std::vector<matrix<rgb_pixel>>& get_faces, cv::Mat& img_encoding);
+
 	static std::string compare_face_on_json(std::string face_img_path, std::string json_path);
 	static std::vector<face_info> read_result_from_json(std::string result_path, std::string json_path);
 
-	//todo: 想好参数！
-	void getFaceEncoding();
 
+	//----------------------------------------------------------------------
+	// todo: 重复性操作打包为成员函数使用
+	static bool getFaceEncoding(matrix<rgb_pixel> face_img, matrix<float, 0, 1>& face_encoding);
+	static float getDistanceOfTwoFace(matrix<float, 0, 1> encoding1, matrix<float, 0, 1> encoding2);
+	static matrix < float, 0, 1> cvMat2dlibMatrix(cv::Mat mat_cv);
+	static void dlibMatrix2cvMat(matrix<float, 0, 1> mat_dlib, cv::Mat& mat_cv);
 };
