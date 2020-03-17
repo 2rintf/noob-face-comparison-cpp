@@ -10,6 +10,8 @@
 #include "ui_facedemogui.h"
 #include "DialogForAddNewFace.h"
 
+#include "faceCompareWrap.h"
+
 class faceDemoGui : public QMainWindow
 {
 	Q_OBJECT
@@ -17,12 +19,19 @@ class faceDemoGui : public QMainWindow
 public:
 	faceDemoGui(QWidget *parent = Q_NULLPTR);
 
+	std::vector<face_info> five_best_results;
+	int result_flag = 0;
+	bool isCompared = false;
+
+	std::string lib_json_path = "3000_simple_face_encoding_v2.json";
+
 private:
 	Ui::faceDemoGuiClass ui;
 	QString upload_img_path;
 	cv::Mat upload_img;
 
 	void allClearOfInfoShow();
+	void showResults(int flag);
 
 private slots:
 
@@ -34,4 +43,5 @@ private slots:
 	void on_fourthBtn_clicked();
 	void on_fifthBtn_clicked();
 	void on_addBtnTest_clicked();
+	void on_addAction_clicked();
 };

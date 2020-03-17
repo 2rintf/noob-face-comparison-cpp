@@ -218,6 +218,14 @@ bool face_compare_alg::add_new_face_to_json(face_info new_face, std::string json
 	int idx = fn1.size();
 	fs1.release();
 
+	//! 补充encoding
+	matrix<rgb_pixel> new_face_img;
+	load_image(new_face_img, new_face.path);
+	matrix<float, 0, 1> encoding_temp;
+	getFaceEncoding(new_face_img, encoding_temp);
+	new_face.encoding = dlibMatrix2cvMat(encoding_temp);
+
+
 	//! 开始写入新人脸数据
 	cv::FileStorage fs2(json_path, cv::FileStorage::APPEND | cv::FileStorage::FORMAT_JSON);
 	if (!fs2.isOpened())
@@ -311,8 +319,8 @@ matrix<float, 0, 1> face_compare_alg::cvMat2dlibMatrix(cv::Mat mat_cv)
 	return dlib_from_cv;
 }
 
-void face_compare_alg::dlibMatrix2cvMat(matrix<float, 0, 1> mat_dlib, cv::Mat& mat_cv)
+cv::Mat face_compare_alg::dlibMatrix2cvMat(matrix<float, 0, 1> mat_dlib)
 {
 	cv::Mat encoding(int(mat_dlib.nr()), int(mat_dlib.nc()), CV_32FC1, mat_dlib.begin());
-	mat_cv = encoding.clone();
+	return encoding.clone();
 }

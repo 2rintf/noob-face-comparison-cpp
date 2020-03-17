@@ -138,5 +138,5 @@ public:
 	static bool getFaceEncoding(matrix<rgb_pixel> face_img, matrix<float, 0, 1>& face_encoding);
 	static float getDistanceOfTwoFace(matrix<float, 0, 1> encoding1, matrix<float, 0, 1> encoding2);
 	static matrix < float, 0, 1> cvMat2dlibMatrix(cv::Mat mat_cv);
-	static void dlibMatrix2cvMat(matrix<float, 0, 1> mat_dlib, cv::Mat& mat_cv);
+	static cv::Mat dlibMatrix2cvMat(matrix<float, 0, 1> mat_dlib);
 };
