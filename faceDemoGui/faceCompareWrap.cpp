@@ -99,7 +99,7 @@ std::string face_compare_alg::compare_face_on_json(std::string face_img_path, st
 	if (!getFaceEncoding(upload_face_img, upload_face_encoding))
 		return "";
 
-	//todo: C++的map是有序的，默认对Key值降序排列。所以利用这一点，将distance
+	//! C++的map是有序的，默认对Key值降序排列。所以后面要转换一下，使得能够使用sort对Value进行排序
 	std::map<int, float> results;
 	
 	//todo: upload_img_encoding
@@ -157,10 +157,81 @@ std::string face_compare_alg::compare_face_on_json(std::string face_img_path, st
 	return results_file_path;
 }
 
-//std::vector<face_info> face_compare_alg::read_result_from_json(std::string result_path, std::string json_path)
-//{
-//	return std::vector<face_info>();
-//}
+std::vector<face_info> face_compare_alg::read_result_from_json(std::string result_path, std::string json_path)
+{
+	//! 先读取5个最佳结果，只读index
+	std::vector<face_info> five_best_results;
+	std::vector<int> idx_vector;
+	cv::FileStorage fs3(result_path, cv::FileStorage::READ);
+	if (!fs3.isOpened())
+	{
+		cout << "Error: Read results_json failed!" << endl;
+		//todo 还未测试这个返回是否会出错
+		return std::vector<face_info>();
+	}
+	cv::FileNode fn3 = fs3.root();
+	cv::FileNodeIterator iter = fn3.begin(), iter_end = fn3.end();
+	for (int i = 0; i < 5; i++, iter++)
+	{
+		int idx_temp;
+		(*iter)["index"] >> idx_temp;
+		idx_vector.push_back(idx_temp);
+	}
+	fs3.release();
+
+	cv::FileStorage fs4(json_path, cv::FileStorage::READ);
+	if (!fs4.isOpened())
+	{
+		cout << "Error: Read results_json failed!" << endl;
+		//todo 还未测试这个返回是否会出错
+		return std::vector<face_info>();
+	}
+
+	for (auto t_vec:idx_vector)
+	{
+		face_info face_temp;
+		fs4["face_" + std::to_string(t_vec)] >> face_temp;
+		five_best_results.push_back(face_temp);
+	}
+
+	fs4.release();
+
+	//todo debug
+	for (auto t : five_best_results)
+	{
+		cout << t.name<<"   "<<t.index << endl;
+	}
+	
+	return five_best_results;
+}
+
+bool face_compare_alg::add_new_face_to_json(face_info new_face, std::string json_path)
+{
+	//! 获取数据库中的最大index.
+	cv::FileStorage fs1(json_path, cv::FileStorage::READ | cv::FileStorage::FORMAT_JSON);
+	if (!fs1.isOpened())
+	{
+		cout << "Error: read face json file failed!" << endl;
+		return false;
+	}
+	cv::FileNode fn1 = fs1.root();
+	int idx = fn1.size();
+	fs1.release();
+
+	//! 开始写入新人脸数据
+	cv::FileStorage fs2(json_path, cv::FileStorage::APPEND | cv::FileStorage::FORMAT_JSON);
+	if (!fs2.isOpened())
+	{
+		cout << "Error: read face json file failed!" << endl;
+		return false;
+	}
+	//! 记住补充正确index后再写入。
+	new_face.index = idx + 1;
+	fs2 << "face_"+std::to_string(idx+1)<<new_face;
+	fs2.release();
+
+	return true;
+}
 
 bool face_compare_alg::getFaceEncoding(matrix<rgb_pixel> face_img, matrix<float, 0, 1>& face_encoding)
 {

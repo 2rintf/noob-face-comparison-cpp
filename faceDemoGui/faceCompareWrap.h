@@ -64,12 +64,14 @@ public:
 	std::string email;
 	std::vector<float> encoding_vector;
 	cv::Mat encoding;
+	
+	face_info():index(0),age(0),phone(0),name(""),path(""),
+		sex(""),email(""){}
 
 
 	void write(cv::FileStorage& fs) const //Write serialization for this class
 	{
-		//todo: 将人脸信息写入json.
-		//! 未测试
+		//! 将人脸信息写入json.
 		fs << "{"
 			<< "name" << name
 			<< "sex" << sex
@@ -120,19 +122,19 @@ public:
 	face_compare_alg();
 	~face_compare_alg();
 
-	//todo: 再确认一下dlib初始化所需的内容!
 	static void initialize();
 	//static frontal_face_detector getFaceDetector() { return face_detector; }
 	//static shape_predictor getFaceSP() { return face_sp; }
 	//static anet_type getFaceNet() { return face_net; }
 	static void detectTestFunc(std::string img_path, std::vector<matrix<rgb_pixel>>& get_faces, cv::Mat& img_encoding);
 
+	//! 项目所需功能
 	static std::string compare_face_on_json(std::string face_img_path, std::string json_path);
 	static std::vector<face_info> read_result_from_json(std::string result_path, std::string json_path);
-
+	static bool add_new_face_to_json(face_info new_face, std::string json_path);
 
 	//----------------------------------------------------------------------
-	// todo: 重复性操作打包为成员函数使用
+	//! 重复性操作打包使用
 	static bool getFaceEncoding(matrix<rgb_pixel> face_img, matrix<float, 0, 1>& face_encoding);
 	static float getDistanceOfTwoFace(matrix<float, 0, 1> encoding1, matrix<float, 0, 1> encoding2);
 	static matrix < float, 0, 1> cvMat2dlibMatrix(cv::Mat mat_cv);
