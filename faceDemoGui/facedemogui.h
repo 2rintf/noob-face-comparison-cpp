@@ -23,7 +23,7 @@ public:
 	int result_flag = 0;
 	bool isCompared = false;
 
-	std::string lib_json_path = "3000_simple_face_encoding_v2.json";
+	std::string lib_json_path = "simple_face_encoding_v2.json";
 
 private:
 	Ui::faceDemoGuiClass ui;
@@ -42,6 +42,6 @@ private slots:
 	void on_thirdBtn_clicked();
 	void on_fourthBtn_clicked();
 	void on_fifthBtn_clicked();
-	void on_addBtnTest_clicked();
+	//void on_addBtnTest_clicked();
 	void on_addAction_clicked();
 };

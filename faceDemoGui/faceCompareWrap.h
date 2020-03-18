@@ -64,6 +64,8 @@ public:
 	std::string email;
 	std::vector<float> encoding_vector;
 	cv::Mat encoding;
+	//! 以后默认新添加数据均为新型
+	bool isNew = true;
 	
 	face_info():index(0),age(0),phone(0),name(""),path(""),
 		sex(""),email(""){}
@@ -81,6 +83,7 @@ public:
 			<< "phone" << phone
 			<< "email" << email
 			<< "encoding" << encoding
+			<< "isNew" << isNew
 			<< "}";
 	}
 
@@ -94,9 +97,20 @@ public:
 		age = (int)node["age"];
 		phone = (int)node["phone"];
 
-		node["encoding"] >> encoding_vector;
-		cv::Mat temp = cv::Mat(128, 1, CV_32FC1, encoding_vector.data());
-		encoding = temp.clone();
+		//! 兼容json数据库的新老数据
+		try
+		{
+			node["encoding"] >> encoding_vector;
+			cv::Mat temp = cv::Mat(128, 1, CV_32FC1, encoding_vector.data());
+			encoding = temp.clone();
+			
+		}
+		catch (const std::exception&)
+		{
+			node["encoding"] >> encoding;
+		}
+		
+
 	}
 };
 
@@ -126,7 +140,7 @@ public:
 	//static frontal_face_detector getFaceDetector() { return face_detector; }
 	//static shape_predictor getFaceSP() { return face_sp; }
 	//static anet_type getFaceNet() { return face_net; }
-	static void detectTestFunc(std::string img_path, std::vector<matrix<rgb_pixel>>& get_faces, cv::Mat& img_encoding);
+	//static void detectTestFunc(std::string img_path, std::vector<matrix<rgb_pixel>>& get_faces, cv::Mat& img_encoding);
 
 	//! 项目所需功能
 	static std::string compare_face_on_json(std::string face_img_path, std::string json_path);

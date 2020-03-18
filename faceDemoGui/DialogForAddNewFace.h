@@ -1,6 +1,7 @@
 #pragma once
 #include <QtWidgets/QDialog>
 #include <qdebug.h>
+#include <qfile.h>
 #include "ui_dialogforaddnewface.h"
 #include <QtWidgets/qfiledialog.h>
 #include <qmessagebox.h>

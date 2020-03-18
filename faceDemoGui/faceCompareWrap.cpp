@@ -11,84 +11,84 @@ void face_compare_alg::initialize()
 	cout << "Iniatialize success. It cost: "<<tic.getTimeSec() << "s" << endl;
 }
 
-void face_compare_alg::detectTestFunc(std::string img_path, std::vector<matrix<rgb_pixel>>& get_faces,
-	cv::Mat& img_encoding)
-{
-	image_window win, win_faces, win_facechip;
-
-	string filePath = img_path;
-
-	matrix<rgb_pixel> img;
-	load_image(img, filePath);
-	//pyramid_up(img);
-
-	win.clear_overlay();
-	win.set_image(img);
-
-
-	cv::TickMeter tic;
-	tic.start();
-	std::vector<dlib::rectangle> dets = face_detector(img);
-	tic.stop();
-	cout << "Detect cost: " << tic.getTimeSec() << "s" << endl;
-
-	std::vector<full_object_detection> shapes;
-	std::vector<matrix<rgb_pixel>> faces; // save the detected face that
-										  // have been normalized to 150x150 and appropriately rotated
-										  // and centered.
-
-	matrix<rgb_pixel> face_chip;
-	for (rectangle face : dets)
-	{
-		auto shape = face_sp(img, face);
-		win.add_overlay(render_face_detections(shape));
-		win_faces.set_image(img);
-		win_faces.add_overlay(face);
-
-		extract_image_chip(img, get_face_chip_details(shape, 150, 0.25), face_chip);
-		win_facechip.set_image(face_chip);
-
-		faces.push_back(move(face_chip));
-
-	}
-	cout << "Hit enter to process the next image..." << endl;
-	cin.get();
-
-	// 将faces拷贝到get_faces，此时faces为空。
-	get_faces.swap(faces);
-	//---------------------------------------------------------------------------
-
-	cv::TickMeter tic2;
-	tic2.start();
-	// 128D vector of face detected.
-	std::vector<matrix<float, 0, 1>> face_descriptors = face_net(faces);
-	tic2.stop();
-	cout << "Get 128D vector cost: " << tic2.getTimeSec() << "s" << endl;
-
-	cout << face_descriptors.size() << endl;
-
-
-	for (auto descriptor : face_descriptors)
-	{
-		//cout << descriptor << endl;
-
-		// dlib::matrix to cv::Mat. 
-		cv::Mat encoding(int(descriptor.nr()), int(descriptor.nc()), CV_32FC1, descriptor.begin());
-		cout << encoding << endl;
-
-		// 因为项目中上传图片只允许有一张脸，所以此处只会迭代一次，故直接取循环中的encoding即可。 
-		img_encoding = encoding.clone();
-
-		// cv::Mat to dlib::matrix.
-		matrix<float, 0, 1> dlib_from_cv;
-		cv_image<float> tmp = encoding;
-		assign_image(dlib_from_cv, tmp);
-		cout << dlib_from_cv << endl;
-	}
-
-
-	
-}
+//void face_compare_alg::detectTestFunc(std::string img_path, std::vector<matrix<rgb_pixel>>& get_faces,
+//	cv::Mat& img_encoding)
+//{
+//	image_window win, win_faces, win_facechip;
+//
+//	string filePath = img_path;
+//
+//	matrix<rgb_pixel> img;
+//	load_image(img, filePath);
+//	//pyramid_up(img);
+//
+//	win.clear_overlay();
+//	win.set_image(img);
+//
+//
+//	cv::TickMeter tic;
+//	tic.start();
+//	std::vector<dlib::rectangle> dets = face_detector(img);
+//	tic.stop();
+//	cout << "Detect cost: " << tic.getTimeSec() << "s" << endl;
+//
+//	std::vector<full_object_detection> shapes;
+//	std::vector<matrix<rgb_pixel>> faces; // save the detected face that
+//										  // have been normalized to 150x150 and appropriately rotated
+//										  // and centered.
+//
+//	matrix<rgb_pixel> face_chip;
+//	for (rectangle face : dets)
+//	{
+//		auto shape = face_sp(img, face);
+//		win.add_overlay(render_face_detections(shape));
+//		win_faces.set_image(img);
+//		win_faces.add_overlay(face);
+//
+//		extract_image_chip(img, get_face_chip_details(shape, 150, 0.25), face_chip);
+//		win_facechip.set_image(face_chip);
+//
+//		faces.push_back(move(face_chip));
+//
+//	}
+//	cout << "Hit enter to process the next image..." << endl;
+//	cin.get();
+//
+//	// 将faces拷贝到get_faces，此时faces为空。
+//	get_faces.swap(faces);
+//	//---------------------------------------------------------------------------
+//
+//	cv::TickMeter tic2;
+//	tic2.start();
+//	// 128D vector of face detected.
+//	std::vector<matrix<float, 0, 1>> face_descriptors = face_net(faces);
+//	tic2.stop();
+//	cout << "Get 128D vector cost: " << tic2.getTimeSec() << "s" << endl;
+//
+//	cout << face_descriptors.size() << endl;
+//
+//
+//	for (auto descriptor : face_descriptors)
+//	{
+//		//cout << descriptor << endl;
+//
+//		// dlib::matrix to cv::Mat. 
+//		cv::Mat encoding(int(descriptor.nr()), int(descriptor.nc()), CV_32FC1, descriptor.begin());
+//		cout << encoding << endl;
+//
+//		// 因为项目中上传图片只允许有一张脸，所以此处只会迭代一次，故直接取循环中的encoding即可。 
+//		img_encoding = encoding.clone();
+//
+//		// cv::Mat to dlib::matrix.
+//		matrix<float, 0, 1> dlib_from_cv;
+//		cv_image<float> tmp = encoding;
+//		assign_image(dlib_from_cv, tmp);
+//		cout << dlib_from_cv << endl;
+//	}
+//
+//
+//	
+//}
 
 std::string face_compare_alg::compare_face_on_json(std::string face_img_path, std::string json_path)
 {

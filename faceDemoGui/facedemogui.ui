@@ -87,25 +87,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="addBtnTest">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>550</y>
-      <width>142</width>
-      <height>37</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Noto Sans Mono CJK SC</family>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>添加新人脸</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="resultGroupBox">
     <property name="geometry">
      <rect>

@@ -141,20 +141,32 @@ void faceDemoGui::on_fifthBtn_clicked()
 		showResults(4);
 }
 
-void faceDemoGui::on_addBtnTest_clicked()
-{
-	DialogForAddNewFace dialog;
-	int result = dialog.exec();
-	qDebug() << result << endl;
-	qDebug() << dialog.trans_test;
-}
+//void faceDemoGui::on_addBtnTest_clicked()
+//{
+//	DialogForAddNewFace dialog;
+//	int result = dialog.exec();
+//	qDebug() << result << endl;
+//	qDebug() << dialog.trans_test;
+//}
 
 void faceDemoGui::on_addAction_clicked()
 {
 	qDebug() << "action.";
 	DialogForAddNewFace dialog;
 	int result = dialog.exec();
-	qDebug() << result << endl;
-	qDebug() << dialog.trans_test;
-	qDebug() << str2qstr(dialog.add_face.name) << str2qstr(dialog.add_face.sex) << dialog.add_face.age << dialog.add_face.phone << endl;
+	qDebug() << "result" << result;
+
+	bool isAdded = false;
+	if (result)
+	{
+		if (!face_compare_alg::add_new_face_to_json(dialog.add_face, lib_json_path))
+		{
+			QMessageBox msg;
+			msg.setWindowTitle("Warning!");
+			msg.setText(str2qstr("Ìí¼ÓÈËÁ³Ê§°Ü£¡"));
+			msg.exec();
+		}
+	}
+
+
 }
